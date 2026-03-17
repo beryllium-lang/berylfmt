@@ -1,6 +1,6 @@
-# Primitive Collision Checker
+# BerylFmt
 
-This is a basic collision checker. This is a specific tool for me, but it should work for custom primitive codes with minor modification to the main file.
+This is a formatter following BCS 1.
 
 ## Dependencies
 
@@ -12,5 +12,10 @@ This is a basic collision checker. This is a specific tool for me, but it should
 Run:
 
 ```sh
-cargo run src/main.rs
+git clone https://github.com/beryllium-lang/berylfmt.git
+cd beryl
+cargo build --release
 ```
+
+The executable should be located at ./target/release/berylfmt.
+
