@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "test-primitive-collision"
+name = "berylfmt"
 version = "0.1.0"
