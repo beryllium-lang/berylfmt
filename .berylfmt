@@ -1,0 +1,3 @@
+tab_size = 4
+column_limit = 120
+declaration_spacing = 1
