@@ -1,4 +1,6 @@
-pub fn find_config() -> Option<String> {
+use std::path::PathBuf;
+
+pub fn find_config() -> Option<PathBuf> {
     let mut curr_path = std::env::current_dir().ok()?;
     
     loop {
@@ -6,7 +8,7 @@ pub fn find_config() -> Option<String> {
         
         if try_config.exists() {
             if try_config.is_file() {
-                return try_config.to_str().map(|s| s.to_string());
+                return Some(try_config);
             } else {
                 return None;
             }
