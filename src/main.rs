@@ -47,14 +47,12 @@ const DEFAULT_CONFIG: FmtConfig = FmtConfig {
 
 fn validate_config(config: &FmtConfig) -> Result<()> {
     let mut config_errors = Vec::new();
-    match config.tab_size {
-        2 | 4 | 8 => {},
-        _ => config_errors.push(format!(
-            "You used a tab size of {}; the only acceptable tab sizes are 2, 4, and 8 spaces", 
+    if !matches!(config.tab_size, 2 | 4 | 8) {
+        config_errors.push(format!(
+            "You used a column limit of {}; the only acceptable tab sizes are 2, 4, and 8",
             config.tab_size
-        ))
+        ));
     }
-
     if config.column_limit > 120 {
         config_errors.push(format!(
             "You used a column limit of {}; column limit cannot exceed 120 characters", 
