@@ -1,6 +1,8 @@
 mod find;
 use find::find_config;
 
+mod tokenize;
+
 use serde::{Serialize, Deserialize};
 use clap::Parser;
 use anyhow::{Context, Result, anyhow};
