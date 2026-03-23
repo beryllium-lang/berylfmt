@@ -1,5 +1,4 @@
-use num_bigint::{BigInt, BigUint};
-use num_traits::Num;
+use num_bigint::{BigUint};
 
 #[derive(Debug, Clone)]
 pub enum Token {
@@ -30,19 +29,43 @@ pub enum Token {
     Less,
     Greater,
     OpenCurly,
-    CloseCurly
+    CloseCurly,
+    For,
+    Repeat,
+    Band,
+    Bor,
+    Bxor,
+    Bxnot,
+    As,
+    Unsafe,
+    And,
+    Or,
+    Not,
+    Eq,
+    Assign,
+    NotEq,
+    Nmsp,
+    Typeof,
+    Valat,
+    Ptrto,
+    Sizeof,
+    PlusEq,
+    MinusEq,
+    AsterEq,
+    ForwSlashEq,
+    ModEq,
+    PlusPlus,
+    MinusMinus,
+    Import,
+    From,
+    True,
+    False,
+    Nullptr,
+    Class,
+    Public,
+    Enum,
+    EOF,
 }
 
-impl Token {
-    pub fn to_string(&self) -> String {
-        match self {
-            Token::IntLit(v) => format!("INT_LIT({v})"),
-            Token::FloatLit(v) => format!("FLOAT_LIT({v})"),
-            Token::StrLit(v) => format!("STR_LIT({v})"),
-            Token::CharLit(v) => format!("CHAR_LIT({v})"),
-            Token::Ident(v) => format!("IDENT({v})"),
-            _ => "NORMAL_TOKEN".into(),
-        }
-    }
-}
+impl Token {}
 

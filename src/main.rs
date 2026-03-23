@@ -2,10 +2,11 @@ mod find;
 use find::find_config;
 
 mod tokenize;
+use tokenize::Token;
 
-use serde::{Serialize, Deserialize};
+use anyhow::{anyhow, Context, Result};
 use clap::Parser;
-use anyhow::{Context, Result, anyhow};
+use serde::{Deserialize, Serialize};
 
 use std::{fs::read_to_string, path::PathBuf};
 
@@ -44,7 +45,7 @@ impl Args {
 const DEFAULT_CONFIG: FmtConfig = FmtConfig {
     tab_size: 4,
     column_limit: 120,
-    declaration_spacing: 1
+    declaration_spacing: 1,
 };
 
 fn validate_config(config: &FmtConfig) -> Result<()> {
@@ -57,7 +58,7 @@ fn validate_config(config: &FmtConfig) -> Result<()> {
     }
     if config.column_limit > 120 {
         config_errors.push(format!(
-            "You used a column limit of {}; column limit cannot exceed 120 characters", 
+            "You used a column limit of {}; column limit cannot exceed 120 characters",
             config.column_limit
         ));
     }
@@ -71,13 +72,12 @@ fn validate_config(config: &FmtConfig) -> Result<()> {
 fn load_config(config_path: Option<PathBuf>) -> Result<FmtConfig> {
     config_path
         .or_else(find_config)
-        .map(
-            |path| {
-                let config_str = read_to_string(&path)
-                    .with_context(|| format!("Failed to read config at {}", path.display()))?;
-                toml::from_str(&config_str)
-                    .with_context(|| format!("Failed to parse config at {}", path.display()))
-            })
+        .map(|path| {
+            let config_str = read_to_string(&path)
+                .with_context(|| format!("Failed to read config at {}", path.display()))?;
+            toml::from_str(&config_str)
+                .with_context(|| format!("Failed to parse config at {}", path.display()))
+        })
         .unwrap_or(Ok(DEFAULT_CONFIG))
 }
 
