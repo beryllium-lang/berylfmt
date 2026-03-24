@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 
 use std::{fs::read_to_string, path::PathBuf};
 
+use crate::tokenize::TokenStream;
+
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 struct FmtConfig {
     tab_size: u8,
@@ -88,5 +90,9 @@ fn main() -> Result<()> {
     let config = load_config(args.config)?;
 
     validate_config(&config)?;
+
+    let source =
+        read_to_string(&args.formatted_file).with_context(|| "Failed to read file to format")?;
+    let tokens = TokenStream::from_source(&source);
     Ok(())
 }
