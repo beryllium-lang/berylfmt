@@ -1,16 +1,15 @@
 mod find;
 use find::find_config;
 
-mod tokenize;
-use tokenize::Token;
+mod be1;
+use be1::tokenize;
+use tokenize::{Token, TokenStream};
 
 use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
 use std::{fs::read_to_string, path::PathBuf};
-
-use crate::tokenize::TokenStream;
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 struct FmtConfig {

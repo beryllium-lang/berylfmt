@@ -1,5 +1,6 @@
 use anyhow::{anyhow, Result};
 use num_bigint::BigUint;
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token {
@@ -77,19 +78,23 @@ pub struct TokenStream {
 }
 
 impl TokenStream {
-    pub fn new() -> Self {
-        Self {
-            data: Vec::new(),
-            cursor: 0,
-        }
-    }
-
     pub fn from_vec(v: Vec<Token>) -> Self {
         Self { data: v, cursor: 0 }
     }
 
     pub fn from_source(src: &str) -> Result<Self> {
         let tokens: Vec<Token> = Vec::new();
+        let src = src.as_bytes();
+
+        let mut idx: usize = 0;
+
+        let peek = || -> char { src[idx] as char };
+
+        let peek_n = |n: usize| -> char { src[(idx + n).max(src.len())] as char };
+
+        while idx < src.len() {
+            //
+        }
 
         Ok(TokenStream::from_vec(tokens))
     }
