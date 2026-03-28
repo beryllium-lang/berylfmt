@@ -5,6 +5,9 @@ mod be1;
 use be1::tokenize;
 use tokenize::{Token, TokenStream};
 
+mod utils;
+use utils::{StrSlice};
+
 use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use serde::{Deserialize, Serialize};
@@ -92,6 +95,6 @@ fn main() -> Result<()> {
 
     let source =
         read_to_string(&args.formatted_file).with_context(|| "Failed to read file to format")?;
-    let tokens = TokenStream::from_source(&source);
+    let tokens = TokenStream::from_source(StrSlice::from_str(&source));
     Ok(())
 }

@@ -1,15 +1,18 @@
 use anyhow::{anyhow, Result};
 use num_bigint::BigUint;
 
+use crate::utils;
+use utils::StrSlice;
+
 #[derive(Debug, Clone, PartialEq)]
-pub enum Token {
+pub enum Token<'a> {
     IntLit(BigUint),
     FloatLit(f64),
-    StrLit(String),
+    StrLit(StrSlice<'a>),
     CharLit(char),
-    Ident(String),
-    Whitespace(String),
-    Comment(String),
+    Ident(StrSlice<'a>),
+    Whitespace(StrSlice<'a>),
+    Comment(StrSlice<'a>),
     Var,
     If,
     Do,
@@ -70,33 +73,33 @@ pub enum Token {
     EOF,
 }
 
-impl Token {}
+impl Token<'_> {}
 
 #[derive(Clone, Debug)]
-pub struct TokenStream {
-    data: Vec<Token>,
+pub struct TokenStream<'a> {
+    source: StrSlice<'a>,
+    data: Vec<Token<'a>>,
     cursor: usize,
 }
 
-impl TokenStream {
-    pub fn from_vec(v: Vec<Token>) -> Self {
-        Self { data: v, cursor: 0 }
+impl<'a> TokenStream<'a> {
+    fn from_vec(source: StrSlice<'a>, v: Vec<Token<'a>>) -> Self {
+        Self { source: source, data: v, cursor: 0 }
     }
 
-    pub fn from_source(src: &str) -> Result<Self> {
+    pub fn from_source(src: StrSlice<'a>) -> Result<Self> {
         let mut tokens: Vec<Token> = Vec::new();
-        let src = src.as_bytes();
 
         let mut idx: usize = 0;
         let mut idx_last = idx;
 
-        while idx < src.len() {
+        while idx < src.len {
             if src[idx].is_ascii_whitespace() {
-                let mut tok = String::new();
+                let mut tok: StrSlice = todo!();
                 idx += 1;
 
                 loop {
-                    tok.push(src[idx] as char);
+                    tok.len += 1;
                     idx += 1;
                     if !src[idx].is_ascii_whitespace() {
                         break;
@@ -105,14 +108,15 @@ impl TokenStream {
 
                 tokens.push(Token::Whitespace(tok));
             }
+            idx_last = idx;
 
             if idx_last == idx {
                 panic!("Lexer froze");
             }
         }
 
-        Ok(TokenStream::from_vec(tokens))
-    }
+        Ok(TokenStream::from_vec(src, tokens))
+   }
 
     pub fn len(&self) -> usize {
         self.data.len()
