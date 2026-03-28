@@ -1,6 +1,5 @@
 use anyhow::{anyhow, Result};
 use num_bigint::BigUint;
-use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token {
@@ -9,6 +8,8 @@ pub enum Token {
     StrLit(String),
     CharLit(char),
     Ident(String),
+    Whitespace(String),
+    Comment(String),
     Var,
     If,
     Do,
@@ -83,17 +84,31 @@ impl TokenStream {
     }
 
     pub fn from_source(src: &str) -> Result<Self> {
-        let tokens: Vec<Token> = Vec::new();
+        let mut tokens: Vec<Token> = Vec::new();
         let src = src.as_bytes();
 
         let mut idx: usize = 0;
-
-        let peek = || -> char { src[idx] as char };
-
-        let peek_n = |n: usize| -> char { src[(idx + n).max(src.len())] as char };
+        let mut idx_last = idx;
 
         while idx < src.len() {
-            //
+            if src[idx].is_ascii_whitespace() {
+                let mut tok = String::new();
+                idx += 1;
+
+                loop {
+                    tok.push(src[idx] as char);
+                    idx += 1;
+                    if !src[idx].is_ascii_whitespace() {
+                        break;
+                    }
+                }
+
+                tokens.push(Token::Whitespace(tok));
+            }
+
+            if idx_last == idx {
+                panic!("Lexer froze");
+            }
         }
 
         Ok(TokenStream::from_vec(tokens))
