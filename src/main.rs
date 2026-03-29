@@ -56,7 +56,7 @@ fn validate_config(config: &FmtConfig) -> Result<()> {
     let mut config_errors = Vec::new();
     if !matches!(config.tab_size, 2 | 4 | 8) {
         config_errors.push(format!(
-            "You used a column limit of {}; the only acceptable tab sizes are 2, 4, and 8",
+            "You used a tab size of {}; the only acceptable tab sizes are 2, 4, and 8",
             config.tab_size
         ));
     }
